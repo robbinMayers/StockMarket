@@ -18,7 +18,7 @@ public class MatchingEngine extends Thread {
             {
                 try
                 {
-                    sleep(10000);
+                    sleep(1000);
                     trade.trade();
 
                 } catch(InterruptedException e) {
