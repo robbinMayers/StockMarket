@@ -2,12 +2,13 @@ package sample;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OrderBooks {
 
     private  static  int id = 1;
-    public static final Map<Integer, Order> orderBuy = new HashMap<>();
-    public static final Map<Integer, Order> orderSell = new HashMap<>();
+    public static final Map<Integer, Order> orderBuy = new ConcurrentHashMap<>();
+    public static final Map<Integer, Order> orderSell = new ConcurrentHashMap<>();
 
 
     public static void addOrder(Order order) {
@@ -21,11 +22,15 @@ public class OrderBooks {
 
         if (order.getOperation())
         {
-            orderBuy.put(order.getId(), order);
+            synchronized (orderBuy) {
+                orderBuy.put(order.getId(), order);
+            }
             status = "Buy";
 
         } else {
-            orderSell.put(order.getId(),order);
+            synchronized (orderSell) {
+                orderSell.put(order.getId(), order);
+            }
             status = "Sell";
         }
         TradeLedger.addOrder(order.toString());
@@ -37,9 +42,13 @@ public class OrderBooks {
         if (order.getOperation())status = "Buy";
         System.out.println("Order with ID " + order.getId() + " canceled: " + order.getName() + " " + status + " " + order.getPrice() + " @ " + order.getQuantity());
         if (order.getOperation()) {
-            orderBuy.put(order.getId(), null);
+            synchronized (orderBuy) {
+                orderBuy.remove(order.getId(), order);
+            }
         } else {
-            orderSell.put(order.getId(),null);
+            synchronized (orderSell) {
+                orderSell.remove(order.getId(), order);
+            }
         }
     }
 }
