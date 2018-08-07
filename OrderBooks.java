@@ -22,15 +22,15 @@ public class OrderBooks {
 
         if (order.getOperation())
         {
-            synchronized (orderBuy) {
+            
                 orderBuy.put(order.getId(), order);
-            }
+            
             status = "Buy";
 
         } else {
-            synchronized (orderSell) {
+            
                 orderSell.put(order.getId(), order);
-            }
+            
             status = "Sell";
         }
         TradeLedger.addOrder(order.toString());
@@ -42,13 +42,13 @@ public class OrderBooks {
         if (order.getOperation())status = "Buy";
         System.out.println("Order with ID " + order.getId() + " canceled: " + order.getName() + " " + status + " " + order.getPrice() + " @ " + order.getQuantity());
         if (order.getOperation()) {
-            synchronized (orderBuy) {
+            
                 orderBuy.remove(order.getId(), order);
-            }
+            
         } else {
-            synchronized (orderSell) {
+            
                 orderSell.remove(order.getId(), order);
-            }
+            
         }
     }
 }
