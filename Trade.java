@@ -5,7 +5,7 @@ import java.util.Map;
 public class Trade {
     private int executionID = 0;
 
-    public void trade() {
+    public void matching() {
         OrderBooks.orderBuy.forEach((idB, B) -> {
             //делаем проверку на лучшую цену продажи и совершаем сделкку
             if(B!=null && bestSellPrice(OrderBooks.orderSell, B)!=null) {
